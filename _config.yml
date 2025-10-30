@@ -1,7 +1,7 @@
 # Site settings
 title: Godot MMORPG Documentation
 description: Technical documentation, Game Design, Art Bible, and Audio Bible for the Godot MMORPG Project
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/docs" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site
 
 # Build settings
