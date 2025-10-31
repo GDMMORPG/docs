@@ -5,9 +5,20 @@ import { getLatestBlogPost, BlogPost } from '../lib/blog';
 
 interface HomeProps {
   latestPost: BlogPost | null;
+  basePath: string;
 }
 
-export default function Home({ latestPost }: HomeProps) {
+export default function Home({ latestPost, basePath }: HomeProps) {
+  // Prepend basePath to image URLs if they're absolute paths
+  const getImagePath = (imagePath: string) => {
+    if (!imagePath) return imagePath;
+    // If it's an absolute path starting with /, prepend basePath
+    if (imagePath.startsWith('/') && basePath) {
+      return `${basePath}${imagePath}`;
+    }
+    return imagePath;
+  };
+
   return (
     <Layout>
       <div className="px-4 py-8">
@@ -28,7 +39,7 @@ export default function Home({ latestPost }: HomeProps) {
               {latestPost.coverImage && (
                 <div className="mb-4 relative h-64 w-full">
                   <Image
-                    src={latestPost.coverImage}
+                    src={getImagePath(latestPost.coverImage)}
                     alt={latestPost.title}
                     fill
                     className="object-cover rounded"
@@ -77,10 +88,18 @@ export default function Home({ latestPost }: HomeProps) {
 
 export const getStaticProps: GetStaticProps = async () => {
   const latestPost = getLatestBlogPost();
+  
+  // Get basePath from environment or use default
+  const isProd = process.env.NODE_ENV === 'production';
+  const repoName = 'docs';
+  const customBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
+  const defaultBasePath = isProd ? `/${repoName}` : '';
+  const basePath = customBasePath || defaultBasePath;
 
   return {
     props: {
       latestPost,
+      basePath,
     },
   };
 };
