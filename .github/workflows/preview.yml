@@ -46,10 +46,16 @@ jobs:
           NODE_ENV: production
           NEXT_PUBLIC_BASE_PATH: /docs/preview/${{ steps.branch-name.outputs.branch }}
 
+      - name: Sanitize branch name
+        id: sanitized-branch-name
+        run: |
+          sanitized="$(echo "${{ steps.branch-name.outputs.branch }}" | sed 's#[^a-zA-Z0-9._-]#-#g')"
+          echo "value=$sanitized" >> $GITHUB_OUTPUT
+
       - name: Upload preview artifact
         uses: actions/upload-artifact@v4
         with:
-          name: preview-${{ steps.branch-name.outputs.branch }}
+          name: preview-${{ steps.sanitized-branch-name.outputs.value }}
           path: ./static-site-source/out
           retention-days: 7
 
