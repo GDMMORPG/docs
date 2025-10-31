@@ -3,9 +3,9 @@ name: Preview Branch Deployment
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  push:
-    branches-ignore:
-      - main
+  # push:
+  #   branches-ignore:
+  #     - main
 
 permissions:
   contents: read
