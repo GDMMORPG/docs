@@ -51,11 +51,11 @@ The deployment workflow:
 
 ### Branch Preview Deployments
 
-Branch previews are automatically deployed to GitHub Pages for pull requests with branch-specific base paths.
+Branch previews are automatically deployed to GitHub Pages for pull requests with branch-specific base paths using the `docs-preview` path prefix.
 
 **How it works:**
 - When you open a PR, a preview deployment is automatically triggered
-- The preview is built with a branch-specific base path (e.g., `/docs/preview/your-branch-name/`)
+- The preview is built with a branch-specific base path (e.g., `/docs-preview/your-branch-name/`)
 - All internal links and assets are configured for this branch-specific path
 - The preview is deployed to the `github-pages-preview-{PR#}` environment
 - A comment is added to the PR with the preview URL
@@ -68,12 +68,13 @@ Branch previews are automatically deployed to GitHub Pages for pull requests wit
 4. Check the "Environments" section in GitHub to see deployment history
 
 **Branch-specific paths:**
-Each preview is built with its own base path like `/docs/preview/branch-name/`. This means:
+Each preview is built with its own base path like `/docs-preview/branch-name/`. This means:
 - The site expects to be served from that specific path
 - All internal navigation and assets use that path prefix
 - The environment URL reflects the branch-specific path
+- Previews use the `docs-preview` prefix to distinguish them from the main docs at `/docs`
 
-> **Important:** GitHub Pages standard deployment serves files at the root. While previews are built with branch-specific paths, only the most recent preview deployment will be accessible since GitHub Pages can serve only one deployment at a time. The main production site is restored when changes are merged to `main`.
+> **Important:** GitHub Pages standard deployment serves files at the root. While previews are built with branch-specific paths using `/docs-preview/`, only the most recent preview deployment will be accessible since GitHub Pages can serve only one deployment at a time. The main production site at `/docs` is restored when changes are merged to `main`.
 
 ## Adding Documentation
 
