@@ -40,12 +40,33 @@ npm run build
 
 ## Deployment
 
+### Production Deployment
+
 The documentation is automatically deployed to GitHub Pages when changes are pushed to the `main` branch via GitHub Actions.
 
 The deployment workflow:
 1. Builds the Next.js static site
 2. Exports to static HTML/CSS/JS
 3. Deploys to GitHub Pages
+
+### Branch Preview Builds
+
+Branch previews are automatically built for pull requests and non-main branches. This allows you to test changes without affecting the main documentation site.
+
+**How it works:**
+- When you open a PR or push to a non-main branch, a preview build is automatically triggered
+- The preview is built with a branch-specific base path (e.g., `/docs/preview/your-branch-name`)
+- A comment is added to the PR with a link to download the preview artifact
+- The preview artifact is retained for 7 days
+
+**Testing a preview locally:**
+1. Go to the Actions tab in GitHub
+2. Find the "Preview Branch Deployment" workflow run for your branch
+3. Download the preview artifact
+4. Extract the files
+5. Serve locally: `npx serve -s ./out`
+
+**Note:** For live preview URLs, you can integrate with services like Netlify, Vercel, or Cloudflare Pages.
 
 ## Adding Documentation
 
