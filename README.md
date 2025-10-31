@@ -51,22 +51,29 @@ The deployment workflow:
 
 ### Branch Preview Deployments
 
-Branch previews are automatically deployed to GitHub Pages for pull requests. This allows you to test changes in a live environment.
+Branch previews are automatically deployed to GitHub Pages for pull requests with branch-specific base paths.
 
 **How it works:**
 - When you open a PR, a preview deployment is automatically triggered
-- The preview is deployed to the `github-pages-preview` environment
-- The preview temporarily uses the GitHub Pages URL (note: this replaces the main site until the PR is closed or merged)
+- The preview is built with a branch-specific base path (e.g., `/docs/preview/your-branch-name/`)
+- All internal links and assets are configured for this branch-specific path
+- The preview is deployed to the `github-pages-preview-{PR#}` environment
 - A comment is added to the PR with the preview URL
 - The preview is automatically updated when new commits are pushed to the PR
 
 **Viewing a preview:**
 1. Open your PR on GitHub
 2. Look for the comment with "🚀 Preview Deployment Complete"
-3. Click the preview URL to view your changes live
+3. Click the preview URL to view your changes live at the branch-specific path
 4. Check the "Environments" section in GitHub to see deployment history
 
-> **Important:** Because GitHub Pages supports only one deployment at a time, preview deployments temporarily replace the main site. The main site is automatically restored when changes are merged to `main`. Only one preview can be active at a time - the most recent PR deployment.
+**Branch-specific paths:**
+Each preview is built with its own base path like `/docs/preview/branch-name/`. This means:
+- The site expects to be served from that specific path
+- All internal navigation and assets use that path prefix
+- The environment URL reflects the branch-specific path
+
+> **Important:** GitHub Pages standard deployment serves files at the root. While previews are built with branch-specific paths, only the most recent preview deployment will be accessible since GitHub Pages can serve only one deployment at a time. The main production site is restored when changes are merged to `main`.
 
 ## Adding Documentation
 

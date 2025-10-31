@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build-preview:
     runs-on: ubuntu-latest
+    outputs:
+      sanitized-branch: ${{ steps.sanitized-branch-name.outputs.value }}
     
     steps:
       - name: Checkout
@@ -48,10 +50,11 @@ jobs:
           sanitized="$(echo "${{ steps.branch-name.outputs.branch }}" | sed 's#[^a-zA-Z0-9._-]#-#g')"
           echo "value=$sanitized" >> $GITHUB_OUTPUT
 
-      - name: Build preview
+      - name: Build preview with branch-specific base path
         run: cd static-site-source && npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_BASE_PATH: /docs/preview/${{ steps.sanitized-branch-name.outputs.value }}
 
       - name: Upload preview artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
@@ -60,8 +63,8 @@ jobs:
 
   deploy-preview:
     environment:
-      name: github-pages-preview
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: github-pages-preview-${{ github.event.pull_request.number }}
+      url: ${{ steps.deployment.outputs.page_url }}preview/${{ needs.build-preview.outputs.sanitized-branch }}/
     runs-on: ubuntu-latest
     needs: build-preview
     
@@ -75,17 +78,22 @@ jobs:
         with:
           script: |
             const branchName = '${{ github.head_ref }}';
-            const previewUrl = '${{ steps.deployment.outputs.page_url }}';
+            const sanitizedBranch = '${{ needs.build-preview.outputs.sanitized-branch }}';
+            const baseUrl = '${{ steps.deployment.outputs.page_url }}';
+            const previewPath = `preview/${sanitizedBranch}/`;
+            const previewUrl = `${baseUrl}${previewPath}`;
+            
             const body = `## 🚀 Preview Deployment Complete
             
-            Your branch preview has been deployed to the GitHub Pages preview environment!
+            Your branch preview has been built with a branch-specific base path!
             
             **Branch:** \`${branchName}\`
-            **Preview URL:** ${previewUrl}
+            **Base Path:** \`/docs/preview/${sanitizedBranch}\`
+            **Expected Preview URL:** ${previewUrl}
             
-            > **Note:** This preview deployment temporarily replaces the main site at the GitHub Pages URL. The main site will be restored when the PR is merged or closed.
-            >
-            > To view this specific preview, visit the URL above. Be aware that only one preview can be active at a time.`;
+            The preview is built expecting to be served at: \`/docs/preview/${sanitizedBranch}/\`
+            
+            > **Note:** GitHub Pages standard deployment serves all files at the root. The preview is built with the branch-specific base path, so all internal links and assets will use that path. However, since GitHub Pages can only serve one deployment at a time, only the most recent preview deployment will be accessible.`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -98,12 +106,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const sanitizedBranch = '${{ needs.build-preview.outputs.sanitized-branch }}';
+            const baseUrl = '${{ steps.deployment.outputs.page_url }}';
+            const previewUrl = `${baseUrl}preview/${sanitizedBranch}/`;
+            
             github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: '${{ github.event.pull_request.head.sha }}',
               state: 'success',
-              target_url: '${{ steps.deployment.outputs.page_url }}',
-              description: 'Preview deployed to GitHub Pages',
+              target_url: previewUrl,
+              description: `Preview at /preview/${sanitizedBranch}/`,
               context: 'preview/deployment'
             });
