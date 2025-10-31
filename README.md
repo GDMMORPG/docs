@@ -49,24 +49,24 @@ The deployment workflow:
 2. Exports to static HTML/CSS/JS
 3. Deploys to GitHub Pages
 
-### Branch Preview Builds
+### Branch Preview Deployments
 
-Branch previews are automatically built for pull requests and non-main branches. This allows you to test changes without affecting the main documentation site.
+Branch previews are automatically deployed to GitHub Pages for pull requests. This allows you to test changes in a live environment.
 
 **How it works:**
-- When you open a PR or push to a non-main branch, a preview build is automatically triggered
-- The preview is built with a branch-specific base path (e.g., `/docs/preview/your-branch-name`)
-- A comment is added to the PR with a link to download the preview artifact
-- The preview artifact is retained for 7 days
+- When you open a PR, a preview deployment is automatically triggered
+- The preview is deployed to the `github-pages-preview` environment
+- The preview temporarily uses the GitHub Pages URL (note: this replaces the main site until the PR is closed or merged)
+- A comment is added to the PR with the preview URL
+- The preview is automatically updated when new commits are pushed to the PR
 
-**Testing a preview locally:**
-1. Go to the Actions tab in GitHub
-2. Find the "Preview Branch Deployment" workflow run for your branch
-3. Download the preview artifact
-4. Extract the files
-5. Serve locally: `npx serve -s ./out`
+**Viewing a preview:**
+1. Open your PR on GitHub
+2. Look for the comment with "🚀 Preview Deployment Complete"
+3. Click the preview URL to view your changes live
+4. Check the "Environments" section in GitHub to see deployment history
 
-**Note:** For live preview URLs, you can integrate with services like Netlify, Vercel, or Cloudflare Pages.
+> **Important:** Because GitHub Pages supports only one deployment at a time, preview deployments temporarily replace the main site. The main site is automatically restored when changes are merged to `main`. Only one preview can be active at a time - the most recent PR deployment.
 
 ## Adding Documentation
 
