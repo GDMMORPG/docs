@@ -36,10 +36,11 @@ jobs:
       - name: Install dependencies
         run: cd static-site-source && npm ci
 
-      - name: Build with Next.js
+      - name: Build with Next.js for latest
         run: cd static-site-source && npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_BASE_PATH: /docs/latest
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

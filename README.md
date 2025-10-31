@@ -45,17 +45,17 @@ npm run build
 The documentation is automatically deployed to GitHub Pages when changes are pushed to the `main` branch via GitHub Actions.
 
 The deployment workflow:
-1. Builds the Next.js static site
+1. Builds the Next.js static site with base path `/docs/latest`
 2. Exports to static HTML/CSS/JS
-3. Deploys to GitHub Pages
+3. Deploys to GitHub Pages at `https://gdmmorpg.github.io/docs/latest/`
 
 ### Branch Preview Deployments
 
-Branch previews are automatically deployed to GitHub Pages for pull requests with branch-specific base paths using the `docs-preview` path prefix.
+Branch previews are automatically deployed to GitHub Pages for pull requests with branch-specific base paths.
 
 **How it works:**
 - When you open a PR, a preview deployment is automatically triggered
-- The preview is built with a branch-specific base path (e.g., `/docs-preview/your-branch-name/`)
+- The preview is built with a branch-specific base path (e.g., `/docs/preview/your-branch-name/`)
 - All internal links and assets are configured for this branch-specific path
 - The preview is deployed to the `github-pages-preview-{PR#}` environment
 - A comment is added to the PR with the preview URL
@@ -67,14 +67,16 @@ Branch previews are automatically deployed to GitHub Pages for pull requests wit
 3. Click the preview URL to view your changes live at the branch-specific path
 4. Check the "Environments" section in GitHub to see deployment history
 
-**Branch-specific paths:**
-Each preview is built with its own base path like `/docs-preview/branch-name/`. This means:
+**Path structure:**
+- **Main/Latest:** `/docs/latest/` - Production documentation from the main branch
+- **Previews:** `/docs/preview/{branch-name}/` - Branch-specific preview deployments
+
+Each preview is built with its own base path like `/docs/preview/branch-name/`. This means:
 - The site expects to be served from that specific path
 - All internal navigation and assets use that path prefix
 - The environment URL reflects the branch-specific path
-- Previews use the `docs-preview` prefix to distinguish them from the main docs at `/docs`
 
-> **Important:** GitHub Pages standard deployment serves files at the root. While previews are built with branch-specific paths using `/docs-preview/`, only the most recent preview deployment will be accessible since GitHub Pages can serve only one deployment at a time. The main production site at `/docs` is restored when changes are merged to `main`.
+> **Important:** GitHub Pages standard deployment serves files at the root. While builds use different base paths (`/docs/latest/` for main, `/docs/preview/{branch}/` for PRs), only the most recent deployment will be accessible since GitHub Pages can serve only one deployment at a time.
 
 ## Adding Documentation
 
