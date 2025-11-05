@@ -7,7 +7,7 @@ export function getDocumentationPath(slug?: string): string {
     if (!isProd) {
         return path.join(process.cwd(), "../", "docs", slug || "");
     } else {
-        return path.join(process.cwd(), "pages", "docs", slug || "");
+        return path.join(process.cwd(), ".pages", "docs", slug || "");
     }
 }
 
@@ -15,7 +15,7 @@ export function getBlogPath(slug?: string): string {
     if (!isProd) {
         return path.join(process.cwd(), "../", "blogs", slug || "");
     } else {
-        return path.join(process.cwd(), "pages", "blogs", slug || "");
+        return path.join(process.cwd(), ".pages", "blogs", slug || "");
     }
 }
 

@@ -39,11 +39,11 @@ jobs:
       - name: Bring Assets, Blogs, and Docs into Next.js Source
         run: |
           mkdir -p static-site-source/public
-          mkdir -p static-site-source/pages/blogs
-          mkdir -p static-site-source/pages/docs
+          mkdir -p static-site-source/.pages/blogs
+          mkdir -p static-site-source/.pages/docs
           cp -r assets static-site-source/public/
-          cp -r blogs static-site-source/pages/blogs/
-          cp -r docs static-site-source/pages/docs/
+          cp -r blogs static-site-source/.pages/blogs/
+          cp -r docs static-site-source/.pages/docs/
 
       - name: Build with Next.js for latest
         run: cd static-site-source && npm run build
