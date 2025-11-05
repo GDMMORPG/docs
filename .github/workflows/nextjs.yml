@@ -49,7 +49,6 @@ jobs:
         run: cd static-site-source && npm run build
         env:
           NODE_ENV: production
-          NEXT_PUBLIC_BASE_PATH: /
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
