@@ -67,9 +67,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v2
         with:
-          app_id: ${{ secrets.CI_APP_ID }}
-          private_key: ${{ secrets.CI_APP_PRIVATEKEY }}
-          installation_id: ${{ secrets.CI_APP_INSTALLATION_ID }}
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATEKEY }}
 
       - name: Clone website repository
         uses: actions/checkout@v4
