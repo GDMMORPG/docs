@@ -80,7 +80,7 @@ jobs:
 
       - name: Sync files from docs to site
         run: |
-          rsync -av --delete --exclude='.git' ./ site-repo/
+          rsync --ignore-missing-args -av --delete --exclude='.git' ./ site-repo/
           cd site-repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
