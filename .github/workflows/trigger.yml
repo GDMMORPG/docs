@@ -20,7 +20,8 @@ jobs:
         with:
           app-id: ${{ secrets.CI_APP_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATEKEY }}
-          repositories: GDMMORPG/gdmmorpg.github.io
+          owner: GDMMORPG
+          # repositories: GDMMORPG/gdmmorpg.github.io
 
       - name: Trigger gdmmorpg.github.io build workflow
         run: |
