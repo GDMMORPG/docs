@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
+export const isProd = process.env.NODE_ENV === 'production';
 const repoName = 'docs'; // GitHub repository name
 
 // Support custom base path for preview builds
